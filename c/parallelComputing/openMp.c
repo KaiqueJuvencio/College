@@ -3,7 +3,7 @@
 
 int main(){
   int max, idThread, k, findElement;
-  int tamVetor = 65536;
+  int tamVetor = 65535;
   int vetor[tamVetor];
 
   max = omp_get_max_threads();
