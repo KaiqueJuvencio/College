@@ -40,6 +40,8 @@ int main(void){
     insereA(grafo,0,1);
     insereA(grafo,0,15);
 
+    removeA(grafo, 0, 3);
+
     //insereA(grafo,1,3);
     //insereA(grafo,2,1);
     //insereA(grafo,2,3);
@@ -96,6 +98,7 @@ void insereA( TGrafo *G, int v, int w){
                         TNo *novo = (TNo*) calloc(1, sizeof(TNo));//Cria novo no
                         novo->w = w;
                         aux2->prox = novo;
+                        G->A++;
                         break;
                     }
                     TNo *aux2Proximo = aux2->prox;
@@ -104,6 +107,7 @@ void insereA( TGrafo *G, int v, int w){
                         novo->w = w;
                         novo->prox = aux2->prox;
                         aux2->prox = novo;
+                        G->A++;
                         break;
                     }
                 }else{//caso o w seja menor que o elemento da lista
@@ -112,6 +116,7 @@ void insereA( TGrafo *G, int v, int w){
                     novo->w = w; //Aloca o w no novo no
                     novo->prox = G->adj[v];
                     G->adj[v] = novo;
+                    G->A++;
                     break;
                 }
                 aux2 = aux2->prox;
@@ -122,6 +127,7 @@ void insereA( TGrafo *G, int v, int w){
             novo->w = w; //Aloca o w no novo no
             novo->prox = G->adj[v];
             G->adj[v] = novo;//Cabeca da lista recebe o novo no
+            G->A++;
             }
     }
 }
@@ -133,6 +139,9 @@ a fun��o n�o faz nada. A fun��o tamb�m atualiza a
 quantidade de arestas no grafo.
 */
 void removeA(TGrafo *G, int v, int w){
+    TNo *aux;
+    aux = G->adj[v];
+    aux = aux->prox;
 
 }
 /*
