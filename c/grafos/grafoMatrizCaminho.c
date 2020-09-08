@@ -39,8 +39,15 @@ int main(void){
     insereA(grafo,0,2);
     insereA(grafo,0,1);
     insereA(grafo,0,15);
+    insereA(grafo,1,15);
+    insereA(grafo,1,6);
+    insereA(grafo,2,5);
+    insereA(grafo,2,6);
+    insereA(grafo,2,2);
+    insereA(grafo,2,7);
 
-    removeA(grafo, 0, 3);
+    removeA(grafo,0,0);
+    removeA(grafo,0,3);
 
     //insereA(grafo,1,3);
     //insereA(grafo,2,1);
@@ -77,22 +84,20 @@ A fun��o tamb�m atualiza a quantidade de arestas no grafo.
 */
 void insereA( TGrafo *G, int v, int w){
     bool wExiste = false; //Seta a flag para verificar se w existe como false
-    int i = 0;
     TNo *aux;
     aux = G->adj[v];
     while( aux ){ // aux != null
         if(w == aux->w){//Verifica se o w ja existe na lista
-            printf("WARNING: Ja existe o %d no grafo \n \n", w);
+            printf("WARNING: Aresta com %d ja existente \n \n", w);
             wExiste = true;//Atribui true na flag, avisando que o w ja existe
         }
         aux = aux->prox;
     }
     if(wExiste == false){//se o w nao existir na lista, pode inserir
-        if(G->adj[v]){
+        if(G->adj[v]){// Se != NULL
             TNo *aux2;
             aux2 = G->adj[v];
-            int v;
-            for(v=0;v<G->V;v++){ // aux != null
+            while (aux2){ // aux != null
                 if(w > aux2->w){// Se o w for maior que o elemento elemento atual da lista
                     if(aux2->prox == NULL){//Se o proximo for nulo
                         TNo *novo = (TNo*) calloc(1, sizeof(TNo));//Cria novo no
@@ -110,12 +115,12 @@ void insereA( TGrafo *G, int v, int w){
                         G->A++;
                         break;
                     }
-                }else{//caso o w seja menor que o elemento da lista
-                    // insere no inicio da lista da entrada do vertice v
+                }if(w < aux2->w){//caso o w seja menor que o elemento da lista
+                     // insere no inicio da lista da entrada do vertice v
                     TNo *novo = (TNo*) calloc(1, sizeof(TNo));//Cria novo no
                     novo->w = w; //Aloca o w no novo no
                     novo->prox = G->adj[v];
-                    G->adj[v] = novo;
+                    G->adj[v] = novo;//Cabeca da lista recebe o novo no
                     G->A++;
                     break;
                 }
@@ -139,10 +144,38 @@ a fun��o n�o faz nada. A fun��o tamb�m atualiza a
 quantidade de arestas no grafo.
 */
 void removeA(TGrafo *G, int v, int w){
+    bool wExiste = false; //Seta a flag para verificar se w existe como false
+    TNo *auxVerifica;
+    auxVerifica = G->adj[v];
+    while( auxVerifica ){ // auxVerifica != null
+        if(w == auxVerifica->w){//Verifica se o w ja existe na lista
+            wExiste = true;//Atribui true na flag, avisando que o w ja existe
+        }
+        auxVerifica = auxVerifica->prox;
+    }
     TNo *aux;
     aux = G->adj[v];
-    aux = aux->prox;
-
+    if(v != w && wExiste == true){//Verifica se aresta existe e se v e w sao diferentes
+        if(aux->w == w){//Se o w for igual ao primeiro elemento
+            G->adj[v] = aux->prox;
+            G->A--;
+            free(aux);
+        }else{
+            while( aux ){ // aux != null
+            TNo *auxProx;
+            auxProx = aux->prox;
+                if(auxProx->w == w){//Se o w for igual ao proximo do elemento atual, ele aponta o proximo do atual para o proximo do proximo
+                    aux->prox = auxProx->prox;
+                    G->A--;
+                    free(auxProx);
+                    break;
+                }
+            aux = aux->prox;
+            }
+        }
+    }else{
+        printf("Para remover: V e W devem ser diferentes \n \n");
+    }
 }
 /*
 Para cada v�rtice v do grafo, esta fun��o imprime,
